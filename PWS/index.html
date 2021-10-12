@@ -1,3 +1,34 @@
+<?php
+
+
+    $message_sent = false;
+    if(isset($_POST['email']) && $_POST['email'] != ''){
+
+        if( filter_var($POST['name'], FILTER_VALIDATE_EMAIL) ){
+
+            //submit the form
+            $userName = $_POST['name'];
+            $userEmail = $_POST['email'];
+            $userSubject = $_POST['subject'];
+            $message = $_POST['message'];
+
+            $to = "JoshGPilot@gmail.com";
+            $body = "";
+
+            $body .= "From: ".$userName. "\r\n";
+            $body .= "Email: ".$userEmail. "\r\n";
+            $body .= "Message: ".$message. "\r\n";
+
+            mail($to,$messageSubject,$body);
+
+            $message_sent = true;
+        }
+        else{
+            $invalid_class_name = "form-invalid";
+        }
+
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +51,9 @@
 <body>
 
 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    
     <section class="s1">
         <div class= "main-container">
             <div class="greeting-wrapper">
@@ -89,23 +123,23 @@
 
                     <h4>My Expertise</h4>
 
-                    <p>Full-stack junior developer with a primary focus on Python, Django, & MySql: <a target="_blank" href="C:\Users\17164\OneDrive\Desktop\My Website\PWS\JGUResume (1).pdf">Download Resume</a> </p>
+                    <p>Full-stack junior developer with a primary focus on Python, Django, & MySql: <a target="_blank" href="JGUResume (1).pdf">Download Resume</a> </p>
 
                     <div id="skills">
                     <ul>
                         <li>Python</li>
-                        <li>Django</li>
                         <li>PHP</li>
                         <li>Javascript</li>
                         <li>HTML/CSS</li>
+                        <li>C#</li>
                     </ul>
                     
                     <ul>
-                        <li>AWS S3</li>
-                        <li>Jupyter Notebook</li>
+                        <li>AWS (S3)</li>
+                        <li>Anaconda</li>
                         <li>Flask</li>
                         <li>MySql</li>
-                        <li>Wordpress</li>
+                        <li>.NET</li>
                     </ul>
                 
                 </div>
@@ -127,7 +161,7 @@
         </div>
     </section>
 
-
+    
     <section class="s1">
         <div class="main-container">
             <h3 style="text-align: center;"> A few of my past projects</h3>
@@ -167,30 +201,42 @@
         </div>
     </section>
 
-
     <section class="s2">
         <div class="main-container">
             <h3 style="text-align: center;">Get in Touch</h3>
             <h4 class="sent-notification"></h4>
             
-            <form id="contact-form">
+    <?php
+        if($message_sent):
+    ?>
+        <h3> Thanks we'll be in touch!</h3>
+
+    <?php
+    else:
+    ?> 
+
+            <form method="POST" action="webform.php" id="contact-form">
                 
                 <label>Name</label>
-                <input id="name" class="input-field" type="text" placeholder="Enter Name">
+                <input id="name" name="name" class="input-field" type="text" placeholder="Enter Name">
 
                 <label>Subject</label>
-                <input id="subject" class="input-field" type="text" placeholder="Enter Subject">
+                <input id="subject" name="subject" class="input-field" type="text" placeholder="Enter Subject">
 
                 <label>Email</label>
-                <input id="email" class="input-field" type="text" placeholder="Enter Email">
+                <input id="email" name="email" class="input-field" type="text" placeholder="Enter Email">
 
                 <label>Message</label>
-                <textarea id="message" class="input-field" type="text" placeholder="Type Message"></textarea>
-                <button id="submit-btn" type="button" onclick="sendEmail()" value="Send An Email">Submit</button>
+                <textarea id="message" class="input-field" name="message" type="text" placeholder="Type Message"></textarea>
+                <button id="" type="button" onclick="mail()" value="Send An Email">Submit</button>
 
             </form>
         </div>
-    </section>
+        </section>
+
+    <?php
+    endif;
+    ?>
 
     <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
 
@@ -198,42 +244,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script type="text/javascript">
-
-        function sendEmail(){
-            var name = $("#name");
-            var email = $("#email");
-            var subject = $("#subject");
-            var message = $("#message");
-
-            if(isNotEmpty(name) && isNotEmpty(email) && isNotEmpty(subject) && isNotEmpty(message)){
-                $.ajax({
-                    url: 'sendEmail.php',
-                    method: 'POST',
-                    datatype: 'json',
-                    data:{
-                        name: name.val(),
-                        email: email.val(),
-                        subject: subject.val(),
-                        message: message.val()
-                    }, success: function(response){
-                        $('#contact-form')[0].reset();
-                        $('.sent-notification').text("Message sent successfully.");
-                    }
-                });
-            }
-        }
-        function isNotEmpty(caller){
-            if(caller.val()==""){
-                caller.css('border', '1px solid red');
-                return false;
-            }
-            else
-            {
-                caller.css('border', '');
-                return true;
-            }
-        }
-    </script>
+    <script type="text/javascript"></script>
 </body>
 </html>
